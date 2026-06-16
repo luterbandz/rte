@@ -25,6 +25,128 @@
       line-height: 1.3;
       letter-spacing: -0.01em;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ---- МОДАЛЬНОЕ ОКНО ---- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 3rem 4rem;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: color 0.3s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .modal-close:hover {
+      color: #fff;
+    }
+
+    .modal-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.2rem;
+      letter-spacing: 0.2em;
+      color: #ccc;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .modal-socials {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-socials a {
+      color: #888;
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.8rem;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-socials a:hover {
+      color: #fff;
+      border-color: #555;
+      background: #1a1a1a;
+      transform: translateX(5px);
+    }
+
+    /* ---- ЗАСТАВКА (сплеш) ---- */
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #splash-screen.hide-splash {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .splash-logo {
+      width: auto;
+      height: min(300px, 60vw);
+      animation: splashPulse 1.2s ease-out forwards;
+    }
+
+    @keyframes splashPulse {
+      0% { transform: scale(0.6); opacity: 0; }
+      40% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     /* ---- НАВИГАЦИЯ ---- */
@@ -73,6 +195,7 @@
     .nav-links {
       display: flex;
       gap: 2.5rem;
+      align-items: center;
     }
 
     .nav-links a {
@@ -80,6 +203,14 @@
       text-decoration: none;
       transition: color 0.3s;
       position: relative;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0;
     }
 
     .nav-links a:hover {
@@ -101,11 +232,36 @@
       width: 100%;
     }
 
+    .nav-links .contact-btn {
+      color: #555;
+      border: 1px solid #2a2a2a;
+      padding: 0.3rem 1rem;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links .contact-btn:hover {
+      color: #ddd;
+      border-color: #555;
+      background: #1a1a1a;
+    }
+
+    .nav-links .contact-btn::after {
+      display: none;
+    }
+
     /* ---- ОСНОВНОЙ КОНТЕЙНЕР ---- */
     .main-container {
       max-width: 1400px;
       margin: 0 auto;
       padding: 2rem 2rem 4rem;
+      opacity: 0;
+      animation: fadeInContent 1s ease 1.5s forwards;
+    }
+
+    @keyframes fadeInContent {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     /* ---- ХИРО-СЕКЦИЯ ---- */
@@ -125,6 +281,8 @@
       height: auto;
       filter: drop-shadow(0 0 40px rgba(255,255,255,0.08));
       transition: transform 0.5s ease;
+      animation: splashPulse 1.2s ease-out forwards;
+      display: block;
     }
 
     .hero-logo:hover {
@@ -137,29 +295,21 @@
       letter-spacing: 0.4em;
       color: #555;
       text-transform: uppercase;
-    }
-
-    .hero-title {
-      font-family: 'Space Mono', monospace;
-      font-weight: 700;
-      font-size: clamp(3.5rem, 10vw, 7rem);
-      letter-spacing: -0.04em;
-      line-height: 0.9;
-      color: #f5f5f5;
-    }
-
-    .hero-sub {
-      font-size: 0.9rem;
-      color: #666;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 400;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.6s forwards;
     }
 
     .hero-socials {
       display: flex;
       gap: 2rem;
       margin-top: 0.5rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.8s forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     .hero-socials a {
@@ -200,6 +350,8 @@
       margin-bottom: 1.8rem;
       border-bottom: 1px solid rgba(255,255,255,0.04);
       padding-bottom: 0.8rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2s forwards;
     }
 
     .section-label {
@@ -222,6 +374,8 @@
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 0.8rem;
       margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.2s forwards;
     }
 
     .member-tag {
@@ -272,6 +426,8 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
       margin-bottom: 4rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.1s forwards;
     }
 
     .release-card {
@@ -413,6 +569,8 @@
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1.5rem;
       margin-bottom: 4rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.3s forwards;
     }
 
     .merch-card {
@@ -514,6 +672,8 @@
       text-transform: uppercase;
       flex-wrap: wrap;
       gap: 1rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.5s forwards;
     }
 
     .footer-links {
@@ -540,18 +700,12 @@
         gap: 1.2rem;
         font-size: 0.6rem;
       }
-      .nav-links a:nth-child(3),
-      .nav-links a:nth-child(4) {
-        display: none;
-      }
       .main-container {
         padding: 1rem 1rem 3rem;
       }
       .hero-logo {
         width: min(200px, 50vw);
-      }
-      .hero-title {
-        font-size: 2.5rem;
+        height: auto;
       }
       .releases-grid,
       .merch-grid {
@@ -566,11 +720,18 @@
         font-size: 0.55rem;
         padding: 0.5rem 0.6rem;
       }
+      .modal-content {
+        padding: 2rem 1.5rem;
+      }
     }
 
     @media (max-width: 480px) {
-      .nav-links {
+      .nav-links a:not(.contact-btn) {
         display: none;
+      }
+      .nav-links .contact-btn {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.8rem;
       }
       .releases-grid,
       .merch-grid {
@@ -593,27 +754,45 @@
         top: -6px;
         right: 4px;
       }
+      .hero-logo {
+        width: min(150px, 40vw);
+      }
+      .modal-content {
+        padding: 1.5rem 1rem;
+      }
+      .modal-title {
+        font-size: 1rem;
+      }
+      .modal-socials a {
+        font-size: 0.7rem;
+        padding: 0.6rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- ЗАСТАВКА (сплеш) — ЧЁРНЫЙ ФОН С ЛОГОТИПОМ -->
+  <div id="splash-screen">
+    <img src="img/rte-logo.png" alt="RTE" class="splash-logo">
+  </div>
+
   <!-- НАВИГАЦИЯ -->
   <nav class="top-nav">
     <div class="nav-logo">
-      <img src="https://images.genius.com/b285d83b642c9b876b6c9463045479aa.1000x1000x1.png" alt="RTE" class="nav-logo-img">
+      <img src="img/rte-logo.png" alt="RTE" class="nav-logo-img">
       <span class="nav-logo-text">RTE</span>
     </div>
     <div class="nav-links">
-      <a href="#">релизы</a>
-      <a href="#">мерч</a>
-      <a href="#">участники</a>
-      <a href="#">контакты</a>
+      <a href="#releases">релизы</a>
+      <a href="#members">участники</a>
+      <a href="#merch">мерч</a>
+      <a class="contact-btn" onclick="openModal()">контакты</a>
     </div>
   </nav>
 
   <div class="main-container">
     <!-- ХИРО -->
-    <section class="hero">
+    <section class="hero" id="hero">
       <img src="img/rte-logo.png" alt="RTE Logo" class="hero-logo">
       <div class="hero-eyebrow">REAL TRAP EMPIRE</div>
       <div class="hero-socials">
@@ -624,13 +803,13 @@
     </section>
 
     <!-- РЕЛИЗЫ -->
-    <section>
+    <section id="releases">
       <div class="section-header">
         <span class="section-label">Релизы</span>
         <span class="section-count">06</span>
       </div>
       <div class="releases-grid">
-        <!-- Релиз 1 - RTE4L (оставлен без изменений) -->
+        <!-- Релиз 1 - RTE4L -->
         <a href="https://soundcloud.com/rte_official/sets/rte4l" target="_blank" rel="noopener" class="release-card">
           <div class="release-art" style="background-image: url('https://t2.genius.com/unsafe/817x0/https%3A%2F%2Fimages.genius.com%2Ff43ad364c474412ce58d8eb9b25427e3.1000x1000x1.png'); background-size: cover; background-position: center;">
             <div class="play-icon"></div>
@@ -723,7 +902,7 @@
     </section>
 
     <!-- УЧАСТНИКИ -->
-    <section>
+    <section id="members">
       <div class="section-header">
         <span class="section-label">Участники</span>
         <span class="section-count">23</span>
@@ -755,7 +934,7 @@
     </section>
 
     <!-- МЕРЧ -->
-    <section>
+    <section id="merch">
       <div class="section-header">
         <span class="section-label">Мерч</span>
         <span class="section-count">04</span>
@@ -815,5 +994,78 @@
       </div>
     </footer>
   </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО КОНТАКТЫ -->
+  <div class="modal-overlay" id="contactModal" onclick="closeModalOutside(event)">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title">Контакты</div>
+      <div class="modal-socials">
+        <a href="https://t.me/realtrapebatnya" target="_blank" rel="noopener">📱 Telegram</a>
+        <a href="https://www.youtube.com/@rte4eva" target="_blank" rel="noopener">▶️ YouTube</a>
+        <a href="https://soundcloud.com/rte_official" target="_blank" rel="noopener">🎵 SoundCloud</a>
+        <a href="https://www.instagram.com/rte_official" target="_blank" rel="noopener">📸 Instagram</a>
+        <a href="https://twitter.com/rte_official" target="_blank" rel="noopener">🐦 Twitter</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Убираем чёрный фон заставки через 1.8 секунды
+    document.addEventListener('DOMContentLoaded', function() {
+      const splash = document.getElementById('splash-screen');
+      
+      setTimeout(function() {
+        splash.classList.add('hide-splash');
+        setTimeout(function() {
+          splash.style.display = 'none';
+        }, 800);
+      }, 1800);
+    });
+
+    // ---- МОДАЛЬНОЕ ОКНО ----
+    function openModal() {
+      const modal = document.getElementById('contactModal');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('contactModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOutside(event) {
+      if (event.target === event.currentTarget) {
+        closeModal();
+      }
+    }
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // ---- ПЛАВНЫЙ СКРОЛЛ ДЛЯ ЯКОРНЫХ ССЫЛОК ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          const navHeight = document.querySelector('.top-nav').offsetHeight;
+          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
